@@ -7,15 +7,23 @@ var visitSchema = new schema({
         type: String
     },
     dateVisit: {
-        type: Date
+        type: String
+    },
+    timeVisit: {
+        type: String
     },
     medecin: {
         type: String
     },
-    observDiag: {
-        type: String
-        }
+    _individu : {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Individu'
+    }
+
 });
+
+var Visit = mongoose.model('Visit', visitSchema);
+module.exports = Visit;
 
 var individuSchema = new schema({
     Nom: {
@@ -27,14 +35,10 @@ var individuSchema = new schema({
         required: 'Enter un prénom'
     },
     dateNaissance: {
-        type: Date
+        type: String
     },
     Sexe: {
-           type:[{
-                 type: String,
-                 enum: ['Masculin', 'Féminin']     
-                }],
-           default: 'Masculin'
+        type: String
       },
       
     CNI: {
@@ -47,15 +51,12 @@ var individuSchema = new schema({
         type: String
     },
     etatMatrimonial: {
-           type:[{
-                 type: String,
-                 enum: ['Célibataire','Marié', 'Veuf', 'Séparé', 'Divorcé']    
-                }],
-           default: 'Célibataire'
+        type: String
       },
  
-    Visit: {
-        type: visitSchema
-    }
+    individuVisits: [{
+        type: schema.Types.ObjectId,
+        ref: 'Visit'
+    }]
 });
 module.exports = mongoose.model('Individu', individuSchema);

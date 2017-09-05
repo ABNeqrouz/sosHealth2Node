@@ -1,6 +1,5 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -23,6 +22,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req, res, next){
+	res.headers('Access-Control-Allow-Origin', "*");
+	res.headers('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
+	res.headers('Access-Control-Allow-Headers', 'Content-Type');
+	next();
+});
 app.use(routes);
 
 // catch 404 and forward to error handler
@@ -33,7 +38,7 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
